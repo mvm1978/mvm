@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class AbstractController extends Controller
 {
     protected $model = NULL;
@@ -12,7 +10,7 @@ class AbstractController extends Controller
     ****************************************************************************
     */
 
-    public function __construct(Request $request)
+    public function __construct($request)
     {
         parent::__construct($request);
     }

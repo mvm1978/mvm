@@ -1,13 +1,7 @@
-/bootstrap
-/test
-/storage
-/resources
-/public
-/database
+/config/mail.php
 /vendor
 /node_modules
 /nbproject
-/tests
 /public/hot
 /public/storage
 /storage/*.key
@@ -16,9 +10,7 @@
 *.pem
 *.ppk
 composer.lock
-artisan
 phpunit.xml
-server.php
 Homestead.json
 Homestead.yaml
 npm-debug.log

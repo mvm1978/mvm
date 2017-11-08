@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,13 +11,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('able-to/v1/questions/get/{id?}', 'AbleTo\QuestionsController@get');
-Route::get('able-to/v1/answers/get-type-info', 'AbleTo\AnswersController@getTypeInfo');
-Route::get('able-to/v1/answers/get/{id?}', 'AbleTo\AnswersController@get');
-Route::get('able-to/v1/quizzes/get/{id?}', 'AbleTo\QuizzesController@get');
-Route::post('able-to/v1/quiz-results/create/{id}', 'AbleTo\QuizResultsController@create');
-Route::get('able-to/v1/quiz-results/{id}', 'AbleTo\QuizResultsController@getTotals');
+Route::group(['middleware' => 'Cors'], function() {
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::get('library/v1/genre', 'Library\GenreController@fetch');
+    Route::get('library/v1/author', 'Library\AuthorController@fetch');
+    Route::patch('library/v1/author/{id}', 'Library\AuthorController@patch');
+
+    Route::post('library/v1/author', 'Library\AuthorController@upload');
 });
