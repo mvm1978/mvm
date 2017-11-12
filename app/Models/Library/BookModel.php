@@ -8,7 +8,7 @@ use App\Models\Library\GenreModel;
 
 class BookModel extends LibraryModel
 {
-    protected $table = 'authors';
+    protected $table = 'books';
 
     protected $fillable = [
         'author_id',
@@ -28,6 +28,52 @@ class BookModel extends LibraryModel
         'approve_date',
         'remove_date',
     ];
+
+    /*
+    ****************************************************************************
+    */
+
+    public function genre()
+    {
+        return $this->belongsTo(__NAMESPACE__ . '\GenreModel', 'genre_id');
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function author()
+    {
+        return $this->belongsTo(__NAMESPACE__ . '\AuthorModel', 'author_id');
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getTableData($data)
+    {
+        $query = $this->select(
+                    'author_id',
+                    'genre_id',
+                    'upload_user_id',
+                    'uploaded_on',
+                    'type',
+                    'title',
+                    'description',
+                    'length',
+                    'picture',
+                    'source',
+                    'downloads',
+                    'upvotes',
+                    'downvotes',
+                    'approved',
+                    'approve_date',
+                    'remove_date'
+                );
+
+        return $this->paginate($query, $data);
+    }
 
     /*
     ****************************************************************************

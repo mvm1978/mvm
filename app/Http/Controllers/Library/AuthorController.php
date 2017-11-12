@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Library;
 
-use App\Http\Controllers\AbstractController;
+use App\Http\Controllers\Library\LibraryController;
 
 use Illuminate\Http\Request;
 
 use App\Models\Library\AuthorModel;
 
-class AuthorController extends AbstractController
+class AuthorController extends LibraryController
 {
     public function __construct(Request $request)
     {

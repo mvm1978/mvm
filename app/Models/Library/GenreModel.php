@@ -16,6 +16,15 @@ class GenreModel extends LibraryModel
     ****************************************************************************
     */
 
+    public function book()
+    {
+        return $this->hasOne(__NAMESPACE__ . '\BookModel');
+    }
+
+    /*
+    ****************************************************************************
+    */
+
     public function getGenres()
     {
         $results = $this->select('genre')

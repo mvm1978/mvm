@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Library;
 
-use App\Http\Controllers\AbstractController;
+use App\Http\Controllers\Library\LibraryController;
 
 use Illuminate\Http\Request;
 
 use App\Models\Library\GenreModel;
 
-class GenreController extends AbstractController
+class GenreController extends LibraryController
 {
     public function __construct(Request $request)
     {

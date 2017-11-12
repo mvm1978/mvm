@@ -2,9 +2,9 @@
 
 namespace App\Models\Library;
 
-use App\Models\AbstractModel;
+use App\Models\BaseModel;
 
-class LibraryModel extends AbstractModel
+class LibraryModel extends BaseModel
 {
     protected $primeKey = 'id';
 

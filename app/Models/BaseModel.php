@@ -6,7 +6,7 @@ use Exception;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AbstractModel extends Model
+class BaseModel extends Model
 {
     protected $table = NULL;
     protected $primeKey = NULL;
@@ -19,8 +19,8 @@ class AbstractModel extends Model
     protected function paginate($query, $data)
     {
         $limit = empty($data['limit']) ? env('TABLE_ROW_COUNT') : $data['limit'];
-        $sort = isset($data['sort']) ? json_decode($data['sort'], TRUE) : NULL ;
-        $filter = isset($data['filter']) ? json_decode($data['filter'], TRUE) : NULL;
+        $sort = isset($data['sort']) ? json_decode($data['sort'], TRUE) : [];
+        $filter = isset($data['filter']) ? json_decode($data['filter'], TRUE) : [];
 
         $query->where(function($query) use ($filter) {
             foreach ($filter as $field => $filterInfo) {

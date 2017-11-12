@@ -14,8 +14,12 @@
 Route::group(['middleware' => 'Cors'], function() {
 
     Route::get('library/v1/genre', 'Library\GenreController@fetch');
+
     Route::get('library/v1/author', 'Library\AuthorController@fetch');
+    Route::post('library/v1/author', 'Library\AuthorController@upload');
     Route::patch('library/v1/author/{id}', 'Library\AuthorController@patch');
 
-    Route::post('library/v1/author', 'Library\AuthorController@upload');
+    Route::get('library/v1/book', 'Library\BookController@fetch');
+    Route::post('library/v1/book', 'Library\BookController@upload');
+    Route::patch('library/v1/book/{id}', 'Library\BookController@patch');
 });

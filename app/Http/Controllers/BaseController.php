@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Routing\Controller as BaseController;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Illuminate\Routing\Controller;
 
 use App\Models\AuthenticationModel;
 
-class Controller extends BaseController
+class BaseController extends Controller
 {
     private $unauthPaths = [];
 
