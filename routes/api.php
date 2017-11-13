@@ -14,6 +14,8 @@
 Route::group(['middleware' => 'Cors'], function() {
 
     Route::get('library/v1/genre', 'Library\GenreController@fetch');
+    Route::post('library/v1/genre', 'Library\GenreController@upload');
+    Route::patch('library/v1/genre/{id}', 'Library\GenreController@patch');
 
     Route::get('library/v1/author', 'Library\AuthorController@fetch');
     Route::post('library/v1/author', 'Library\AuthorController@upload');

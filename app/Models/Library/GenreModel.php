@@ -7,7 +7,7 @@ use App\Models\Library\LibraryModel;
 class GenreModel extends LibraryModel
 {
     protected $table = 'genres';
-
+    protected $primeKey = 'id';
     protected $fillable = [
         'genre',
     ];
@@ -16,25 +16,42 @@ class GenreModel extends LibraryModel
     ****************************************************************************
     */
 
-    public function book()
+    public function getTableData($data)
     {
-        return $this->hasOne(__NAMESPACE__ . '\BookModel');
+        $query = $this->select(
+                    'id',
+                    'genre'
+                );
+
+        return $this->paginate($query, $data);
     }
 
     /*
     ****************************************************************************
     */
 
-    public function getGenres()
+    public function getByName($genre)
     {
-        $results = $this->select('genre')
-                ->orderBy('genre')
-                ->get();
+        $result = $this->select('*')
+                ->where('genre', $genre)
+                ->first();
 
-        return $results;
+        return $result ? $result->toArray() : [];
     }
 
     /*
     ****************************************************************************
     */
+
+    public function createGenre($genre)
+    {
+        $this->create([
+            'genre' => $genre,
+        ]);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }
