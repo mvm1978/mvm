@@ -8,6 +8,7 @@ class GenreModel extends LibraryModel
 {
     protected $table = 'genres';
     protected $primeKey = 'id';
+    protected $dropdown = 'genre';
     protected $fillable = [
         'genre',
     ];

@@ -10,7 +10,29 @@ class BaseModel extends Model
 {
     protected $table = NULL;
     protected $primeKey = NULL;
+    protected $dropdown = NULL;
     public $timestamps = FALSE;
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getDropdown()
+    {
+        $query = $this->select(
+                    $this->primeKey,
+                    $this->dropdown
+                 );
+
+        $results = $query->orderBy($this->dropdown)
+                ->get()
+                ->toArray();
+
+        $keys = array_column($results, $this->primeKey);
+        $values = array_column($results, $this->dropdown);
+
+        return array_combine($values, $keys);
+    }
 
     /*
     ****************************************************************************

@@ -21,9 +21,10 @@ class BaseController extends Controller
     ****************************************************************************
     */
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, $model)
     {
         $this->userID = NULL;
+        $this->model = $model;
 
         $parsed = explode('/', $request->getPathInfo());
 
@@ -65,6 +66,15 @@ class BaseController extends Controller
                 ];
             }
         }
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getDropdown(Request $request)
+    {
+        return $this->model->getDropdown();
     }
 
     /*

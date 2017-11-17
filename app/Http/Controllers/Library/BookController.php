@@ -13,10 +13,10 @@ class BookController extends LibraryController
 {
     public function __construct(Request $request)
     {
-        parent::__construct($request);
-
         $this->model = new BookModel();
         $this->transformer = new BookTransformer();
+
+        parent::__construct($request, $this->model);
     }
 
     /*
@@ -31,9 +31,29 @@ class BookController extends LibraryController
 
         $params = $request->all();
 
-        $results = $this->model->getTableData($params)->all();
+        $results = $this->model->getTableData($params);
 
-        return $this->transformer->transformCollection($results);
+        $this->transformer->transformCollection($results->all());
+
+        return $results;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function patch(Request $request, $id)
+    {
+        if (! empty($this->construct['error'])) {
+            return $this->constructErrorResponse();
+        }
+
+        $payload = $request->all();
+
+        $result = $this->model->patchField($payload, $id);
+
+        return $result ? $this->makeResponse(200, 'patch_successful') :
+            $this->makeResponse(500, 'patch_error');
     }
 
     /*

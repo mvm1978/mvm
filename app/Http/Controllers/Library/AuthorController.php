@@ -12,9 +12,9 @@ class AuthorController extends LibraryController
 {
     public function __construct(Request $request)
     {
-        parent::__construct($request);
-
         $this->model = new AuthorModel();
+
+        parent::__construct($request, $this->model);
     }
 
     /*

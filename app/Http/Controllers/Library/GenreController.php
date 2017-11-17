@@ -12,9 +12,9 @@ class GenreController extends LibraryController
 {
     public function __construct(Request $request)
     {
-        parent::__construct($request);
-
         $this->model = new GenreModel();
+
+        parent::__construct($request, $this->model);
     }
 
     /*

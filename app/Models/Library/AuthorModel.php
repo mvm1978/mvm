@@ -8,6 +8,7 @@ class AuthorModel extends LibraryModel
 {
     protected $table = 'authors';
     protected $primeKey = 'id';
+    protected $dropdown = 'author';
     protected $fillable = [
         'author',
         'description',
