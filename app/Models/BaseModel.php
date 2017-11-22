@@ -113,12 +113,12 @@ class BaseModel extends Model
     ****************************************************************************
     */
 
-    public function patchField($data, $id)
+    public function patchField($field, $id, $payload)
     {
         try {
             $this->where($this->primeKey, $id)
                 ->update([
-                    $data['field'] => $data['value'],
+                    $field => $payload['value'],
                 ]);
         } catch (Exception $exception) {
             return FALSE;
@@ -130,4 +130,26 @@ class BaseModel extends Model
     /*
     ****************************************************************************
     */
+
+    public function insertEntry($data)
+    {
+        try {
+            $result = $this->create($data)->toArray();
+        } catch (Exception $exception) {
+            return FALSE;
+        }
+
+        $primeKey = $this->primeKey;
+
+        $return = ! $result[$primeKey] ? NULL : [
+            $primeKey => $result[$primeKey],
+        ];
+
+        return $return;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }

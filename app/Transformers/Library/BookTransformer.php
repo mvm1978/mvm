@@ -8,10 +8,7 @@ class BookTransformer extends AbstractTransformer
 {
     public function transform($book)
     {
-        return [
-            'user' => '',
-            'type' => $book->type = 'P' ? 'Printed' : 'Audiobook',
-        ];
+        return [];
     }
 
     /*

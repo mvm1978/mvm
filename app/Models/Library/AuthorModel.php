@@ -47,18 +47,4 @@ class AuthorModel extends LibraryModel
     /*
     ****************************************************************************
     */
-
-    public function createAuthor($author, $description, $picture)
-    {
-        $this->create([
-            'author' => $author,
-            'description' => $description,
-            'picture' => $picture,
-        ]);
-    }
-
-    /*
-    ****************************************************************************
-    */
-
 }

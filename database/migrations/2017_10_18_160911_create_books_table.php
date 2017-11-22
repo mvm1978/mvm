@@ -14,16 +14,16 @@ class CreateBooksTable extends Migration
     public function up()
     {
         Schema::create('books', function (Blueprint $table) {
-            $table->increments('id', 8);
-            $table->integer('genre_id')->length(5)->unsigned();
-            $table->integer('author_id')->length(5)->unsigned();
+            $table->increments('id', 10);
+            $table->integer('genre_id')->length(10)->unsigned();
+            $table->integer('author_id')->length(10)->unsigned();
             $table->integer('upload_user_id')->length(10)->unsigned();
             $table->timestamp('uploaded_on')->useCurrent();
-            $table->enum('type', ['A', 'P']);
+            $table->integer('type_id')->length(10)->unsigned();
             $table->string('title', 100);
             $table->string('description', 255)->nullable();
             $table->integer('length')->length(5)->unsigned();
-            $table->string('picture', 100)->unique();
+            $table->string('picture', 100)->unique()->nullable();
             $table->string('source', 100)->unique();
             $table->integer('downloads')->length(8)->unsigned()->default(0);
             $table->integer('upvotes')->length(10)->unsigned()->default(0);
@@ -35,6 +35,7 @@ class CreateBooksTable extends Migration
             $table->index('genre_id');
             $table->index('author_id');
             $table->index('upload_user_id');
+            $table->index('type_id');
             $table->index('title');
         });
     }

@@ -16,14 +16,20 @@ Route::group(['middleware' => 'Cors'], function() {
     Route::get('library/v1/genre', 'Library\GenreController@fetch');
     Route::get('library/v1/genre/dropdown', 'Library\GenreController@getDropdown');
     Route::post('library/v1/genre', 'Library\GenreController@upload');
-    Route::patch('library/v1/genre/{id}', 'Library\GenreController@patch');
+    Route::patch('library/v1/genre/{field}/{id}', 'Library\GenreController@patch');
 
     Route::get('library/v1/author', 'Library\AuthorController@fetch');
     Route::get('library/v1/author/dropdown', 'Library\AuthorController@getDropdown');
     Route::post('library/v1/author', 'Library\AuthorController@upload');
-    Route::patch('library/v1/author/{id}', 'Library\AuthorController@patch');
+    // have to use POST method rather than PUT or PATCH when updating a picture
+    Route::post('library/v1/author/{field}/{id}', 'Library\AuthorController@patch');
+    Route::patch('library/v1/author/{field}/{id}', 'Library\AuthorController@patch');
 
     Route::get('library/v1/book', 'Library\BookController@fetch');
     Route::post('library/v1/book', 'Library\BookController@upload');
-    Route::patch('library/v1/book/{id}', 'Library\BookController@patch');
+    // have to use POST method rather than PUT or PATCH when updating a picture
+    Route::post('library/v1/book/{field}/{id}', 'Library\BookController@patch');
+    Route::patch('library/v1/book/{field}/{id}', 'Library\BookController@patch');
+
+    Route::get('library/v1/type/dropdown', 'Library\TypeController@getDropdown');
 });

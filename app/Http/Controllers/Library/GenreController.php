@@ -27,54 +27,18 @@ class GenreController extends LibraryController
             return $this->constructErrorResponse();
         }
 
-        $body = $request->toArray();
+        $params = $request->toArray();
 
-        $genre = $body['genre'];
-
-        $genreExists = $this->model->getByName($genre);
+        $genreExists = $this->model->getByName($params['genre']);
 
         if ($genreExists) {
             return $this->makeResponse(422, 'genre_exists');
         }
 
-        $this->model->createGenre($genre);
+        $result = $this->model->insertEntry($params);
 
-        return $this->makeResponse(200, 'genre_upload_successful');
-    }
-
-    /*
-    ****************************************************************************
-    */
-
-    public function fetch(Request $request)
-    {
-        if (! empty($this->construct['error'])) {
-            return $this->constructErrorResponse();
-        }
-
-        $params = $request->all();
-
-        $result = $this->model->getTableData($params);
-
-        return $result;
-    }
-
-    /*
-    ****************************************************************************
-    */
-
-    public function patch(Request $request, $id)
-    {
-        if (! empty($this->construct['error'])) {
-            return $this->constructErrorResponse();
-        }
-
-        $payload = $request->all();
-
-        $result = $this->model->patchField($payload, $id);
-
-        return $result ? $this->makeResponse(200, 'patch_successful') :
-            $this->makeResponse(500, 'patch_error');
+        return $result ? $this->makeResponse(200, 'genre_created', $result) :
+                $this->makeResponse(500, 'error_creating_genre');
     }
 
     /*

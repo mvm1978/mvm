@@ -23,37 +23,38 @@ class BookController extends LibraryController
     ****************************************************************************
     */
 
-    public function fetch(Request $request)
+    public function upload(Request $request)
     {
         if (! empty($this->construct['error'])) {
             return $this->constructErrorResponse();
         }
 
-        $params = $request->all();
+        $params = [];
+        $payload = $request->toArray();
 
-        $results = $this->model->getTableData($params);
+        foreach ($payload as $field => $value) {
+            if (is_object($value)) {
 
-        $this->transformer->transformCollection($results->all());
+                $uploadFile = $field == 'source' ? $this->getUploadSource($value) :
+                        $this->getUploadImage('books', $value);
 
-        return $results;
-    }
+                if ($uploadFile['error']) {
+                    return $uploadFile['error'];
+                }
 
-    /*
-    ****************************************************************************
-    */
+                $params[$field] = $uploadFile['file'];
 
-    public function patch(Request $request, $id)
-    {
-        if (! empty($this->construct['error'])) {
-            return $this->constructErrorResponse();
+            } else {
+                $params[$field] = $value;
+            }
         }
 
-        $payload = $request->all();
+        $params['upload_user_id'] = $this->userID;
 
-        $result = $this->model->patchField($payload, $id);
+        $result = $this->model->insertEntry($params);
 
-        return $result ? $this->makeResponse(200, 'patch_successful') :
-            $this->makeResponse(500, 'patch_error');
+        return $result ? $this->makeResponse(200, 'author_created', $result) :
+                $this->makeResponse(500, 'error_creating_author');
     }
 
     /*

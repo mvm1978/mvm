@@ -15,7 +15,7 @@ class BookModel extends LibraryModel
         'genre_id',
         'upload_user_id',
         'uploaded_on',
-        'type',
+        'type_id',
         'title',
         'description',
         'length',
@@ -51,6 +51,15 @@ class BookModel extends LibraryModel
     ****************************************************************************
     */
 
+    public function type()
+    {
+        return $this->belongsTo(__NAMESPACE__ . '\TypeModel', 'type_id');
+    }
+
+    /*
+    ****************************************************************************
+    */
+
     public function getTableData($data)
     {
         $query = $this->select(
@@ -59,7 +68,7 @@ class BookModel extends LibraryModel
                     'genres.genre',
                     'books.upload_user_id',
                     DB::raw('DATE(books.uploaded_on) AS uploaded_on'),
-                    'books.type',
+                    'types.type',
                     'books.title',
                     'books.description',
                     'books.length',
@@ -73,7 +82,8 @@ class BookModel extends LibraryModel
                     'books.remove_date'
                 )
                 ->join('authors', 'authors.id', 'books.author_id')
-                ->join('genres', 'genres.id', 'books.genre_id');
+                ->join('genres', 'genres.id', 'books.genre_id')
+                ->join('types', 'types.id', 'books.type_id');
 
         return $this->paginate($query, $data);
     }
