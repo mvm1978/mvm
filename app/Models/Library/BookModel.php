@@ -92,4 +92,37 @@ class BookModel extends LibraryModel
     ****************************************************************************
     */
 
+    public function vote($id, $previousVote, $vote)
+    {
+        $votes = $this->select(
+                    'upvotes',
+                    'downvotes'
+                )
+                ->where($this->primeKey, $id)
+                ->first()
+                ->toArray();
+
+        $field = $vote . 'votes';
+        $antiField = $vote == 'up' ? 'downvotes' : 'upvotes';
+
+        if (! isset($previousVote['vote'])) {
+            $votes[$field]++;
+        } elseif ($previousVote['vote'] != $vote) {
+            $votes[$field]++;
+            $votes[$antiField]--;
+        }
+
+        $votes[$field] = max(0, $votes[$field]);
+        $votes[$antiField] = max(0, $votes[$antiField]);
+
+        $this->where($this->primeKey, $id)
+            ->update($votes);
+
+        return $votes;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }

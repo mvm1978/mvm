@@ -17,10 +17,12 @@ class CreateVotesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->length(10)->unsigned();
             $table->integer('book_id')->length(10)->unsigned();
+            $table->enum('vote', ['up', 'down']);
             $table->timestamp('voted_on')->useCurrent();
 
             $table->index('book_id');
             $table->index('user_id');
+            $table->unique(['user_id', 'book_id']);
         });
     }
 

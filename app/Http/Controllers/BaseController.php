@@ -24,7 +24,7 @@ class BaseController extends Controller
 
     public function __construct(Request $request, $model)
     {
-        $this->userID = NULL;
+        $this->userID = 0;
         $this->model = $model;
 
         $parsed = explode('/', $request->getPathInfo());
@@ -86,11 +86,9 @@ class BaseController extends Controller
     ****************************************************************************
     */
 
-    protected function makeResponse($code, $message)
+    protected function makeResponse($code, $message, $data=[])
     {
-        return response()->json([
-            'message' => $message,
-        ], $code);
+        return response()->json($data + ['message' => $message], $code);
     }
 
     /*
@@ -150,7 +148,7 @@ class BaseController extends Controller
             }
 
             $payload = [
-                'value' => $uploadImage['image'],
+                'value' => $uploadImage['file'],
             ];
         }
 
@@ -169,17 +167,17 @@ class BaseController extends Controller
         if (substr($upload->getMimeType(), 0, 5) != 'image') {
             return [
                 'error' => $this->makeResponse(422, 'invalid_upload_mime_type'),
-                'image' => NULL,
+                'file' => NULL,
             ];
         } elseif (! $upload->getSize()) {
             return [
                 'error' => $this->makeResponse(422, 'empty_upload_file'),
-                'image' => NULL,
+                'file' => NULL,
             ];
         } elseif ($upload->getSize() > 1024 * 1024 * 5) {
             return [
                 'error' => $this->makeResponse(422, 'invalid_upload_size'),
-                'image' => NULL,
+                'file' => NULL,
             ];
         }
 
@@ -202,12 +200,12 @@ class BaseController extends Controller
         if (! in_array($mimeType, ['application/pdf', 'audio/mpeg'])) {
             return [
                 'error' => $this->makeResponse(422, 'invalid_upload_mime_type'),
-                'source' => NULL,
+                'file' => NULL,
             ];
         } elseif (! $upload->getSize()) {
             return [
                 'error' => $this->makeResponse(422, 'empty_upload_file'),
-                'source' => NULL,
+                'file' => NULL,
             ];
         }
 
@@ -225,6 +223,16 @@ class BaseController extends Controller
     ****************************************************************************
     */
 
+    protected function getStorageFolder()
+    {
+        return storage_path() . DIRECTORY_SEPARATOR . 'app' .
+                DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
     private function getStorageFileName($upload, $path)
     {
         $fileName = round(microtime(TRUE) * 1000);
@@ -234,10 +242,8 @@ class BaseController extends Controller
 
         $upload->move(public_path($path), $storageFileName);
 
-        $publicFolder = 'app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
-
         copy(public_path() . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $storageFileName,
-                storage_path() . DIRECTORY_SEPARATOR . $publicFolder . $storageFileName);
+                $this->getStorageFolder() . $storageFileName);
 
         return $storageFileName;
     }

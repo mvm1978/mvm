@@ -5,6 +5,7 @@
 /public/hot
 /public/storage
 /storage
+/public
 /.idea
 /.vagrant
 *.pem

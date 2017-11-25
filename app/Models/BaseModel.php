@@ -89,6 +89,10 @@ class BaseModel extends Model
     {
         $clause = $operator == 'OR' ? 'orWhere' : 'where';
 
+        if (strpos($field, '.') === FALSE) {
+            $field = $this->table . '.' . $field;
+        }
+
         switch ($info['condition']) {
             case 'equals-to':
                 $query->$clause($field, $info['value']);
