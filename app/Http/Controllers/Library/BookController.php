@@ -108,4 +108,20 @@ class BookController extends LibraryController
     ****************************************************************************
     */
 
+    public function chart(Request $request)
+    {
+        if (! empty($this->construct['error'])) {
+            return $this->constructErrorResponse();
+        }
+
+        $result = $this->model->getCharts();
+
+        return $result ? $this->makeResponse(200, 'charts_created', $result) :
+                $this->makeResponse(500, 'error_creating_charts');
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }

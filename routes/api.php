@@ -32,6 +32,7 @@ Route::group(['middleware' => 'Cors'], function() {
     // have to use POST method rather than PUT or PATCH when updating a picture
     Route::post('library/v1/book/{field}/{id}', 'Library\BookController@patch');
     Route::patch('library/v1/book/{field}/{id}', 'Library\BookController@patch');
+    Route::get('library/v1/book/chart', 'Library\BookController@chart');
 
     Route::get('library/v1/type/dropdown', 'Library\TypeController@getDropdown');
 });

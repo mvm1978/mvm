@@ -125,4 +125,54 @@ class BookModel extends LibraryModel
     ****************************************************************************
     */
 
+    public function getCharts()
+    {
+        $return = [];
+        $maxSegment = 5;
+
+        foreach (['author', 'genre'] as $field) {
+
+            $table = $field . 's';
+
+            $return[$table] = [];
+
+            $results = $this->select(
+                        $table . '.' . $field,
+                        DB::raw('COUNT(books.id) AS bookCount')
+                    )
+                    ->join($table, $table . '.id', 'books.' .$field . '_id')
+                    ->groupBy($field)
+                    ->orderBy('bookCount', 'desc')
+                    ->get()
+                    ->toArray();
+
+            $count = 0;
+            $info = [];
+
+            foreach ($results as $result) {
+
+                $index = min($maxSegment, $count++);
+
+                $info['labels'][$index] = $count > $maxSegment + 1 ? 'Other' :
+                        $result[$field];
+
+                $info['data'][$index] = $info['data'][$index] ?? 0;
+
+                $info['data'][$index] = $count > $maxSegment + 1 ?
+                        $info['data'][$index] + $result['bookCount'] :
+                        $result['bookCount'];
+
+                $count = $count++;
+            }
+
+            $return[$table] = $info;
+        }
+
+        return $return;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }
