@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
-use App\Models\Library\GenresModel;
+use App\Models\Library\GenreModel;
 
 class GenresTableSeeder extends Seeder
 {
@@ -16,119 +16,119 @@ class GenresTableSeeder extends Seeder
     {
         DB::table('genres')->delete();
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Action and Adventure',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Anthology',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Art',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Autobiographies',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Biographies',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Children\'s',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Comics',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Cookbooks',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Diaries',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Dictionaries',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Drama',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Encyclopedias',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Fantasy',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Guide',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Health',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'History',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Horror',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Journals',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Math',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Mystery',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Poetry',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Prayer books',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Religion, Spirituality & New Age',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Romance',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Satire',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Science',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Science fiction',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Self help',
         ]);
 
-        GenresModel::create([
+        GenreModel::create([
             'genre' => 'Travel',
         ]);
     }
