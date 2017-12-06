@@ -10,7 +10,15 @@ use App\Models\AuthenticationModel;
 
 class BaseController extends Controller
 {
-    private $unauthPaths = [];
+    private $unauthPaths = [
+        'GET' => [
+            'genre' => TRUE,
+            'genre/dropdown' => TRUE,
+            'author' => TRUE,
+            'author/dropdown' => TRUE,
+            'book' => TRUE,
+        ],
+    ];
 
     private $model;
     protected $transformer;

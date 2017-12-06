@@ -40,7 +40,7 @@ class BaseModel extends Model
 
     protected function paginate($query, $data)
     {
-        $limit = empty($data['limit']) ? env('TABLE_ROW_COUNT') : $data['limit'];
+        $limit = $data['limit'] ?? env('TABLE_ROW_COUNT');
         $sort = isset($data['sort']) ? json_decode($data['sort'], TRUE) : [];
         $filter = isset($data['filter']) ? json_decode($data['filter'], TRUE) : [];
 
