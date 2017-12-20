@@ -16,6 +16,8 @@ class BaseController extends Controller
             'genre/dropdown' => TRUE,
             'author' => TRUE,
             'author/dropdown' => TRUE,
+            'type' => TRUE,
+            'type/dropdown' => TRUE,
             'book' => TRUE,
         ],
     ];
