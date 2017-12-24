@@ -19,6 +19,15 @@ class BaseController extends Controller
             'type' => TRUE,
             'type/dropdown' => TRUE,
             'book' => TRUE,
+            'book/chart' => TRUE,
+            'author/download-report-pdf' => TRUE,
+            'book/download-report-pdf' => TRUE,
+            'genre/download-report-pdf' => TRUE,
+        ],
+        'POST' => [
+            'author/create-report-pdf' => TRUE,
+            'book/create-report-pdf' => TRUE,
+            'genre/create-report-pdf' => TRUE,
         ],
     ];
 
@@ -46,7 +55,7 @@ class BaseController extends Controller
         }
 
         $method = $request->method();
-        $resourse = $parsed[4];
+        $resourse = implode('/', array_slice($parsed, 4, 2));
 
         if (! isset($this->unauthPaths[$method][$resourse])) {
             // some requests may not need pior authorization
@@ -233,19 +242,9 @@ class BaseController extends Controller
     ****************************************************************************
     */
 
-    protected function getStorageFolder()
-    {
-        return storage_path() . DIRECTORY_SEPARATOR . 'app' .
-                DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
-    }
-
-    /*
-    ****************************************************************************
-    */
-
     private function getStorageFileName($upload, $path)
     {
-        $fileName = round(microtime(TRUE) * 1000);
+        $fileName = round(microtime(TRUE) * 10000);
         $extension = $upload->getClientOriginalExtension();
 
         $storageFileName = $fileName . '.' . $extension;
@@ -253,7 +252,7 @@ class BaseController extends Controller
         $upload->move(public_path($path), $storageFileName);
 
         copy(public_path() . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $storageFileName,
-                $this->getStorageFolder() . $storageFileName);
+                $this->model->getStorageFolder() . $storageFileName);
 
         return $storageFileName;
     }

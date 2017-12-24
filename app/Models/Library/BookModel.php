@@ -5,6 +5,7 @@ namespace App\Models\Library;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Library\LibraryModel;
+use App\Models\Library\Reports\BookReportModel;
 
 class BookModel extends LibraryModel
 {
@@ -62,7 +63,18 @@ class BookModel extends LibraryModel
 
     public function getTableData($data)
     {
-        $query = $this->select(
+        $query = $this->getQuery();
+
+        return $this->paginate($query, $data);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getQuery()
+    {
+        return $this->select(
                     'books.id',
                     'authors.author',
                     'genres.genre',
@@ -84,8 +96,6 @@ class BookModel extends LibraryModel
                 ->join('authors', 'authors.id', 'books.author_id')
                 ->join('genres', 'genres.id', 'books.genre_id')
                 ->join('types', 'types.id', 'books.type_id');
-
-        return $this->paginate($query, $data);
     }
 
     /*
@@ -169,6 +179,44 @@ class BookModel extends LibraryModel
         }
 
         return $return;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getChartImages($charts)
+    {
+        foreach ($charts as &$chart) {
+
+            $content = substr($chart, strpos($chart, ',') + 1);
+
+            $chartContent = base64_decode($content);
+            $fileName = round(microtime(TRUE) * 10000);
+
+            $chart = $this->getTempFolder() . $fileName . '.png';
+
+            file_put_contents($chart, $chartContent);
+        }
+
+        return $charts;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function createReport($info, $file)
+    {
+        $reportModel = new BookReportModel();
+
+        $query = $this->getQuery();
+
+        $results = $this->applySortAndFilter($query, $info['outputSettings'])
+                ->get()
+                ->toArray();
+
+        $reportModel->createReport($results, $info, $file);
     }
 
     /*

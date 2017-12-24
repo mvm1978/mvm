@@ -179,6 +179,7 @@ return [
 
         Cyvelnet\Laravel5Fractal\Laravel5FractalServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Elibyy\TCPDF\ServiceProvider::class,
     ],
 
     /*
@@ -230,6 +231,7 @@ return [
 
         'Fractal' => Cyvelnet\Laravel5Fractal\Facades\Fractal::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class,
     ],
 
 ];

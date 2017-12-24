@@ -41,8 +41,27 @@ class BaseModel extends Model
     protected function paginate($query, $data)
     {
         $limit = $data['limit'] ?? env('TABLE_ROW_COUNT');
-        $sort = isset($data['sort']) ? json_decode($data['sort'], TRUE) : [];
-        $filter = isset($data['filter']) ? json_decode($data['filter'], TRUE) : [];
+
+        return $this->applySortAndFilter($query, $data)->paginate($limit);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    protected function applySortAndFilter($query, $data=[])
+    {
+        $sort = $filter = [];
+
+        if (isset($data['sort'])) {
+            $sort = is_array($data['sort']) ? $data['sort'] :
+                json_decode($data['sort'], TRUE);
+        }
+
+        if (isset($data['filter'])) {
+            $filter = is_array($data['filter']) ? $data['filter'] :
+                json_decode($data['filter'], TRUE);
+        }
 
         $query->where(function($query) use ($filter) {
             foreach ($filter as $field => $filterInfo) {
@@ -57,7 +76,7 @@ class BaseModel extends Model
             $query->orderBy($filed, $sortOrder);
         }
 
-        return $query->paginate($limit);
+        return $query;
     }
 
     /*
@@ -150,6 +169,25 @@ class BaseModel extends Model
         ];
 
         return $return;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getStorageFolder()
+    {
+        return storage_path() . DIRECTORY_SEPARATOR . 'app' .
+                DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getTempFolder()
+    {
+        return $this->getStorageFolder() . 'temp' . DIRECTORY_SEPARATOR;
     }
 
     /*

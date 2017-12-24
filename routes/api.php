@@ -17,6 +17,9 @@ Route::group(['middleware' => 'Cors'], function() {
     Route::get('library/v1/genre/dropdown', 'Library\GenreController@getDropdown');
     Route::post('library/v1/genre', 'Library\GenreController@upload');
     Route::patch('library/v1/genre/{field}/{id}', 'Library\GenreController@patch');
+    Route::post('library/v1/genre/create-report-pdf', 'Library\GenreController@createReportPDF');
+    Route::get('library/v1/genre/download-report-pdf/{fileName}',
+            'Library\GenreController@downloadReportPDF');
 
     Route::get('library/v1/author', 'Library\AuthorController@fetch');
     Route::get('library/v1/author/dropdown', 'Library\AuthorController@getDropdown');
@@ -24,6 +27,9 @@ Route::group(['middleware' => 'Cors'], function() {
     // have to use POST method rather than PUT or PATCH when updating a picture
     Route::post('library/v1/author/{field}/{id}', 'Library\AuthorController@patch');
     Route::patch('library/v1/author/{field}/{id}', 'Library\AuthorController@patch');
+    Route::post('library/v1/author/create-report-pdf', 'Library\AuthorController@createReportPDF');
+    Route::get('library/v1/author/download-report-pdf/{fileName}',
+            'Library\AuthorController@downloadReportPDF');
 
     Route::get('library/v1/book', 'Library\BookController@fetch');
     Route::get('library/v1/book/download/{fileName}', 'Library\BookController@download');
@@ -33,6 +39,9 @@ Route::group(['middleware' => 'Cors'], function() {
     Route::post('library/v1/book/{field}/{id}', 'Library\BookController@patch');
     Route::patch('library/v1/book/{field}/{id}', 'Library\BookController@patch');
     Route::get('library/v1/book/chart', 'Library\BookController@chart');
+    Route::post('library/v1/book/create-report-pdf', 'Library\BookController@createReportPDF');
+    Route::get('library/v1/book/download-report-pdf/{fileName}',
+            'Library\BookController@downloadReportPDF');
 
     Route::get('library/v1/type/dropdown', 'Library\TypeController@getDropdown');
 });

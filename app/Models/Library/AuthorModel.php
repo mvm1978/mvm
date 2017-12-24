@@ -3,6 +3,7 @@
 namespace App\Models\Library;
 
 use App\Models\Library\LibraryModel;
+use App\Models\Library\Reports\AuthorReportModel;
 
 class AuthorModel extends LibraryModel
 {
@@ -21,14 +22,23 @@ class AuthorModel extends LibraryModel
 
     public function getTableData($data)
     {
-        $query = $this->select(
+        $query = $this->getQuery();
+
+        return $this->paginate($query, $data);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getQuery()
+    {
+        return $this->select(
                     'id',
                     'author',
                     'description',
                     'picture'
                 );
-
-        return $this->paginate($query, $data);
     }
 
     /*
@@ -47,4 +57,22 @@ class AuthorModel extends LibraryModel
     /*
     ****************************************************************************
     */
+
+    public function createReport($info, $file)
+    {
+        $reportModel = new AuthorReportModel();
+
+        $query = $this->getQuery();
+
+        $results = $this->applySortAndFilter($query, $info['outputSettings'])
+                ->get()
+                ->toArray();
+
+        $reportModel->createReport($results, $info, $file);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }
