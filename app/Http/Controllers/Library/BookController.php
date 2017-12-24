@@ -34,7 +34,7 @@ class BookController extends LibraryController
             return $this->constructErrorResponse();
         }
 
-        $file = $this->getStorageFolder() . $fileName;
+        $file = $this->model->getStorageFolder() . $fileName;
 
         $headers = [
             'Content-Type: application/pdf',

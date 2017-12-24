@@ -19,6 +19,7 @@ class BaseController extends Controller
             'type' => TRUE,
             'type/dropdown' => TRUE,
             'book' => TRUE,
+            'book/download' => TRUE,
             'book/chart' => TRUE,
             'author/download-report-pdf' => TRUE,
             'book/download-report-pdf' => TRUE,
