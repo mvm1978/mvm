@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 
 class LibraryModel extends BaseModel
 {
+    protected $database = 'library';
     protected $primeKey = 'id';
 
     /*

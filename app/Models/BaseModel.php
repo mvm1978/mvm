@@ -5,9 +5,11 @@ namespace App\Models;
 use Exception;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BaseModel extends Model
 {
+    protected $database = NULL;
     protected $table = NULL;
     protected $primeKey = NULL;
     protected $dropdown = NULL;
@@ -156,6 +158,14 @@ class BaseModel extends Model
 
     public function insertEntry($data)
     {
+        $fields = array_keys($data);
+
+        $maxLength = $this->getFieldsMaxLength($fields);
+
+        foreach ($maxLength as $field => $maxSize) {
+            $data[$field] = substr($data[$field], 0, $maxSize);
+        }
+
         try {
             $result = $this->create($data)->toArray();
         } catch (Exception $exception) {
@@ -169,6 +179,31 @@ class BaseModel extends Model
         ];
 
         return $return;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    private function getFieldsMaxLength($fields)
+    {
+        $result = DB::table('information_schema.columns')
+                ->select(DB::raw('
+                    COLUMN_NAME AS fieldName,
+                    CHARACTER_MAXIMUM_LENGTH AS maxSize
+                '))
+                ->where([
+                    ['table_schema', $this->database],
+                    ['table_name', $this->getTable()],
+                ])
+                ->whereIn('COLUMN_NAME', $fields)
+                ->get()
+                ->toArray();
+
+        $fieldNames = array_column($result, 'fieldName');
+        $maxSizes = array_column($result, 'maxSize');
+
+        return array_combine($fieldNames, $maxSizes);
     }
 
     /*
