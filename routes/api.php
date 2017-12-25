@@ -42,6 +42,8 @@ Route::group(['middleware' => 'Cors'], function() {
     Route::post('library/v1/book/create-report-pdf', 'Library\BookController@createReportPDF');
     Route::get('library/v1/book/download-report-pdf/{fileName}',
             'Library\BookController@downloadReportPDF');
+    Route::get('library/v1/book/create-pdf/{title}/{author}',
+            'Library\BookController@createPDF');
 
     Route::get('library/v1/type/dropdown', 'Library\TypeController@getDropdown');
 });

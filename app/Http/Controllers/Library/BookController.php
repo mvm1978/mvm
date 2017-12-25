@@ -124,4 +124,25 @@ class BookController extends LibraryController
     ****************************************************************************
     */
 
+    public function createPDF(Request $request, $title, $author)
+    {
+        if (! empty($this->construct['error'])) {
+            return $this->constructErrorResponse();
+        }
+
+        $model = $this->model;
+
+        $bookTitle = ucwords(str_replace('_', ' ', $title));
+        $bookAuthor = ucwords(str_replace('_', ' ', $author));
+        $file = $this->model->getTempFolder() . $bookTitle . '.pdf';
+
+        $model->createPDF($bookTitle, $bookAuthor, $file);
+
+        return $this->makeResponse(200, 'report_created');
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }

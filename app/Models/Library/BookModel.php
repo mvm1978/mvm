@@ -223,4 +223,15 @@ class BookModel extends LibraryModel
     ****************************************************************************
     */
 
+    public function createPDF($title, $author, $file)
+    {
+        $reportModel = new BookReportModel();
+
+        $reportModel->createPDF($title, $author, $file);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }
