@@ -2,9 +2,9 @@
 
 namespace App\Common;
 
-use Elibyy\TCPDF\TCPdf;
+use Elibyy\TCPDF\TCPDF;
 
-class TC_PDF extends TCPdf
+class TC_PDF extends TCPDF
 {
     public $rowHeight = 6;
 
