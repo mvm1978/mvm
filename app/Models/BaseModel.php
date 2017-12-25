@@ -163,7 +163,9 @@ class BaseModel extends Model
         $maxLength = $this->getFieldsMaxLength($fields);
 
         foreach ($maxLength as $field => $maxSize) {
-            $data[$field] = substr($data[$field], 0, $maxSize);
+            if ($maxSize) {
+                $data[$field] = substr($data[$field], 0, $maxSize);
+            }
         }
 
         try {
