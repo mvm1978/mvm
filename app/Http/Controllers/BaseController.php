@@ -80,7 +80,7 @@ class BaseController extends Controller
 
             $model = new AuthenticationModel();
 
-            $this->userID = $model->verifyToken($token, $id);
+            $this->userID = $model->verifyToken($token, $id) ? $id : 0;
 
             if (! $this->userID) {
                 return $this->construct = [
