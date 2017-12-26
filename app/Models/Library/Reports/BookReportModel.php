@@ -53,7 +53,7 @@ class BookReportModel extends TableReportModel
 
     public function createPDF($title, $author, $file)
     {
-        $this->AddPage($this->orientation);
+        $this->AddPage('P');
 
         $pageWidth = $this->getCustomPageWidth();
 
@@ -83,7 +83,7 @@ class BookReportModel extends TableReportModel
             $this->customMultiCell([
                 'width' => $pageWidth,
                 'text' => $text,
-                'align' => 'J',
+                'align' => 'L',
             ]);
         }
 
