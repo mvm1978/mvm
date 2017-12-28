@@ -25,6 +25,7 @@ class BaseController extends Controller
             'book/download-report-pdf' => TRUE,
             'genre/download-report-pdf' => TRUE,
             'book/create-pdf' => TRUE,
+            'book/top' => TRUE,
         ],
         'POST' => [
             'author/create-report-pdf' => TRUE,

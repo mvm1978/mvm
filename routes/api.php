@@ -33,6 +33,7 @@ Route::group(['middleware' => 'Cors'], function() {
 
     Route::get('library/v1/book', 'Library\BookController@fetch');
     Route::get('library/v1/book/download/{fileName}', 'Library\BookController@download');
+    Route::get('library/v1/book/top/{amount}', 'Library\BookController@getTop');
     Route::post('library/v1/book', 'Library\BookController@upload');
     Route::post('library/v1/book/vote/{id}', 'Library\BookController@vote');
     // have to use POST method rather than PUT or PATCH when updating a picture

@@ -145,4 +145,17 @@ class BookController extends LibraryController
     ****************************************************************************
     */
 
+    public function getTop(Request $request, $amount)
+    {
+        if (! empty($this->construct['error'])) {
+            return $this->constructErrorResponse();
+        }
+
+        return $this->model->getTop($amount);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }

@@ -234,4 +234,26 @@ class BookModel extends LibraryModel
     ****************************************************************************
     */
 
+    public function getTop($amount)
+    {
+        return $this->select(
+                    'books.title',
+                    'authors.author',
+                    'books.description',
+                    'books.picture',
+                    'books.source',
+                    DB::raw('books.upvotes - books.downvotes AS popularity')
+                )
+                ->join('authors', 'authors.id', 'books.author_id')
+                ->orderBy('popularity', 'desc')
+                ->orderBy('books.id', 'desc')
+                ->limit($amount)
+                ->get()
+                ->toArray();
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }
