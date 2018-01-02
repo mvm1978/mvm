@@ -242,10 +242,16 @@ class BookModel extends LibraryModel
                     'books.description',
                     'books.picture',
                     'books.source',
-                    DB::raw('books.upvotes - books.downvotes AS popularity')
+                    DB::raw('
+                        CONCAT_WS(
+                            " ", books.length, IF(type = "Paper", "pages", "minutes")
+                        ) AS length
+                    '),
+                    DB::raw('books.upvotes - books.downvotes AS rating')
                 )
                 ->join('authors', 'authors.id', 'books.author_id')
-                ->orderBy('popularity', 'desc')
+                ->join('types', 'types.id', 'books.type_id')
+                ->orderBy('rating', 'desc')
                 ->orderBy('books.id', 'desc')
                 ->limit($amount)
                 ->get()

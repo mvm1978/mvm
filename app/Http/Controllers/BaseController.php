@@ -16,14 +16,17 @@ class BaseController extends Controller
             'genre/dropdown' => TRUE,
             'author' => TRUE,
             'author/dropdown' => TRUE,
+            'author/count' => TRUE,
             'type' => TRUE,
             'type/dropdown' => TRUE,
+            'type/count' => TRUE,
             'book' => TRUE,
             'book/download' => TRUE,
             'book/chart' => TRUE,
             'author/download-report-pdf' => TRUE,
             'book/download-report-pdf' => TRUE,
             'genre/download-report-pdf' => TRUE,
+            'genre/count' => TRUE,
             'book/create-pdf' => TRUE,
             'book/top' => TRUE,
         ],
@@ -102,6 +105,19 @@ class BaseController extends Controller
         }
 
         return $this->model->getDropdown();
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getCount(Request $request)
+    {
+        if (! empty($this->construct['error'])) {
+            return $this->constructErrorResponse();
+        }
+
+        return $this->model->getCount();
     }
 
     /*

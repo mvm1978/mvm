@@ -21,12 +21,11 @@ class BaseModel extends Model
 
     public function getDropdown()
     {
-        $query = $this->select(
+        $results = $this->select(
                     $this->primeKey,
                     $this->dropdown
-                 );
-
-        $results = $query->orderBy($this->dropdown)
+                )
+                ->orderBy($this->dropdown)
                 ->get()
                 ->toArray();
 
@@ -34,6 +33,28 @@ class BaseModel extends Model
         $values = array_column($results, $this->dropdown);
 
         return array_combine($values, $keys);
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getCount()
+    {
+        $table = $this->table;
+        $field = $this->dropdown;
+
+        return $this->select(
+                    $table . '.' . $this->primeKey,
+                    DB::raw($table . '.' . $field . ' AS name'),
+                    DB::raw('COUNT(books.id) AS `count`')
+                )
+                ->join('books', 'books.' .$field . '_id', $table . '.id')
+                ->groupBy($table . '.' . $this->primeKey)
+                ->groupBy($field)
+                ->orderBy($field, 'ASC')
+                ->get()
+                ->toArray();
     }
 
     /*
