@@ -10,8 +10,7 @@ class BookReportModel extends TableReportModel
     protected $centered = [
         'length' => TRUE,
         'uploaded_on' => TRUE,
-        'upvotes' => TRUE,
-        'downvotes' => TRUE,
+        'rating' => TRUE,
     ];
     protected $orientation = 'L';
 
@@ -31,20 +30,58 @@ class BookReportModel extends TableReportModel
     ****************************************************************************
     */
 
-    protected function setCustomTextColor($field=NULL)
+    protected function setCustomTextColor($field=NULL, $value=NULL)
     {
         switch ($field) {
-            case 'upvotes':
-                // RGB (40, 167, 69)  =  CMY (215, 88, 186)
-                $this->SetTextColor(215, 60, 186, 0);
-                break;
-            case 'downvotes':
-                // RGB (242, 71, 71)  =  CMY (13, 184, 184)
-                $this->SetTextColor(13, 184, 184, 0);
+            case 'rating':
+                if ($value) {
+                    // RGB (40, 167, 69)  =  CMY (215, 88, 186) - GREEN
+                    // RGB (242, 71, 71)  =  CMY (13, 184, 184) - RED
+                    $value < 0 ? $this->SetTextColor(13, 184, 184, 0) :
+                            $this->SetTextColor(215, 60, 186, 0);
+                }
+
                 break;
             default:
                 break;
         }
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    protected function getCustomValue($field=NULL, $value=NULL)
+    {
+        $return = $value;
+
+        switch ($field) {
+            case 'rating':
+
+                if (! $value) {
+                    return 'Not Rated';
+                }
+
+                $return = $value < 0 ? ' - ' : NULL;
+
+                $value = abs($value);
+
+                if ($value < pow(10, 3)) {
+                    $return .= $value;
+                } else if ($value < pow(10, 6)) {
+                    $return .= (round(($value / pow(10, 3)) * 10 ) / 10) . ' K';
+                } else if ($value < pow(10, 9)) {
+                    $return .= (round(($value / pow(10, 6)) * 10 ) / 10) . ' M';
+                } else if ($value < pow(10, 12)) {
+                    $return .= (round(($value / pow(10, 9)) * 10 ) / 10) . ' B';
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        return $return;
     }
 
     /*

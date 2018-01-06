@@ -91,7 +91,8 @@ class BookModel extends LibraryModel
                     'books.downvotes',
                     'books.approved',
                     'books.approve_date',
-                    'books.remove_date'
+                    'books.remove_date',
+                    DB::raw('books.upvotes - books.downvotes AS rating')
                 )
                 ->join('authors', 'authors.id', 'books.author_id')
                 ->join('genres', 'genres.id', 'books.genre_id')

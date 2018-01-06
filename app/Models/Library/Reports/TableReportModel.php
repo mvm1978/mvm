@@ -277,12 +277,12 @@ class TableReportModel extends TC_PDF
 
             $isCentered = isset($this->centered[$field]);
 
-            $this->setCustomTextColor($field);
+            $this->setCustomTextColor($field, $values[$field]);
 
             $this->customMultiCell([
                 'width' => $column['colWidth'],
                 'height' => $rowHeight,
-                'text' => $values[$field] ? $values[$field] : NULL,
+                'text' => $this->getCustomValue($field, $values[$field]),
                 'border' => 1,
                 'align' => $isCentered ? 'C' : 'L',
                 'ln' => 0,
@@ -298,9 +298,19 @@ class TableReportModel extends TC_PDF
     ****************************************************************************
     */
 
-    protected function setCustomTextColor($field=NULL)
+    protected function setCustomTextColor($field=NULL, $value=NULL)
     {
         // empty declaration: may be overriden by child classes
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    protected function setCustomValue($field=NULL, $value=NULL)
+    {
+        // empty declaration: may be overriden by child classes
+        return $value;
     }
 
     /*
