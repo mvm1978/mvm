@@ -61,9 +61,12 @@ class BaseController extends Controller
         }
 
         $method = $request->method();
-        $resourse = implode('/', array_slice($parsed, 4, 2));
+        $firstResourse = $parsed[4];
+        $fullResourse = implode('/', array_slice($parsed, 4, 2));
 
-        if (! isset($this->unauthPaths[$method][$resourse])) {
+        if (! isset($this->unauthPaths[$method][$fullResourse])
+         && ! isset($this->unauthPaths[$method][$firstResourse])) {
+
             // some requests may not need pior authorization
             $header = $request->header();
 
