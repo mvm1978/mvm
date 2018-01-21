@@ -307,7 +307,7 @@ class TableReportModel extends TC_PDF
     ****************************************************************************
     */
 
-    protected function setCustomValue($field=NULL, $value=NULL)
+    protected function getCustomValue($field=NULL, $value=NULL)
     {
         // empty declaration: may be overriden by child classes
         return $value;
