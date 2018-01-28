@@ -375,13 +375,19 @@ class TableReportModel extends TC_PDF
         $chartY = $this->getCustomPageTopMargin() + $this->rowHeight;
 
         foreach ($charts as $key => $chart) {
-            if ($chartX + $this->chartWidth > $pageWidth) {
+
+            $chartWidthFactor = $chart['width-factor'] ?? 1;
+
+            $chartWidth = round($this->chartWidth * $chartWidthFactor);
+
+            if ($chartX + $chartWidth > $pageWidth) {
                 $chartX = 0;
-                $chartY = $this->getChartY($chartY, $pageHeight, $topMargin);
+                $chartY = $this->getChartY($chartY + $this->rowHeight,
+                        $pageHeight, $topMargin);
             }
 
             $this->customMultiCell([
-                'width' => $this->chartWidth,
+                'width' => $chartWidth,
                 'text' => $key,
                 'align' => 'C',
                 'fill' => FALSE,
@@ -391,14 +397,14 @@ class TableReportModel extends TC_PDF
             ]);
 
             $this->customImage([
-                'file' => $chart,
+                'file' => $chart['file'],
                 'x' => $chartX,
                 'y' => $chartY + $this->rowHeight,
-                'w' => $this->chartWidth,
+                'w' => $chartWidth,
                 'h' => $this->chartHeight,
             ]);
 
-            $chartX += $this->chartWidth;
+            $chartX += $chartWidth;
         }
     }
 

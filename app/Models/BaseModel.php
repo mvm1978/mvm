@@ -183,11 +183,10 @@ class BaseModel extends Model
 
         $maxLength = $this->getFieldsMaxLength($fields);
 
-        foreach ($maxLength as $field => $maxSize) {
-            if ($maxSize) {
-                $data[$field] = substr($data[$field], 0, $maxSize);
-            }
-        }
+        array_walk($data, function(&$value, $field) use ($maxLength) {
+            $value = ! $maxLength[$field] ? $value :
+                    str_limit($value, $maxLength[$field] - 5, ' ...');
+        });
 
         try {
             $result = $this->create($data)->toArray();

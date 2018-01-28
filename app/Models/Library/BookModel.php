@@ -179,6 +179,35 @@ class BookModel extends LibraryModel
             $return[$table] = $info;
         }
 
+        $results = $this->select(
+                    'title',
+                    DB::raw('SUM(upvotes) AS upvotes'),
+                    DB::raw('SUM(downvotes) AS downvotes'),
+                    DB::raw('SUM(upvotes - downvotes) AS bookRating')
+                )
+                ->groupBy('title')
+                ->orderBy('bookRating', 'desc')
+                ->orderBy('title', 'asc')
+                ->take($maxSegment)
+                ->get()
+                ->toArray();
+
+        $return += [
+            'books' => [
+                'labels' => array_column($results, 'title'),
+                'data' => [
+                    [
+                        'data' => array_column($results, 'upvotes'),
+                        'label' => 'Upvotes',
+                    ],
+                    [
+                        'data' => array_column($results, 'downvotes'),
+                        'label' => 'Downvotes',
+                    ],
+                ],
+            ]
+        ];
+
         return $return;
     }
 
@@ -188,16 +217,16 @@ class BookModel extends LibraryModel
 
     public function getChartImages($charts)
     {
-        foreach ($charts as &$chart) {
+        foreach ($charts as &$info) {
 
-            $content = substr($chart, strpos($chart, ',') + 1);
+            $content = substr($info['file'], strpos($info['file'], ',') + 1);
 
             $chartContent = base64_decode($content);
             $fileName = round(microtime(TRUE) * 10000);
 
-            $chart = $this->getTempFolder() . $fileName . '.png';
+            $info['file'] = $this->getTempFolder() . $fileName . '.png';
 
-            file_put_contents($chart, $chartContent);
+            file_put_contents($info['file'], $chartContent);
         }
 
         return $charts;
