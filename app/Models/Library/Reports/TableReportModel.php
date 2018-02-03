@@ -33,7 +33,8 @@ class TableReportModel extends TC_PDF
     public function createReport($results, $info, $file)
     {
         $this->AddPage($this->orientation);
-
+file_put_contents('../../outputs/vadzim_results.txt', print_r($results, TRUE));
+file_put_contents('../../outputs/vadzim_info.txt', print_r($info, TRUE));
         $pageHeight = $this->getCustomPageHeight();
         $bottomMargin = $this->getCustomPageBottomMargin();
 
@@ -279,16 +280,36 @@ class TableReportModel extends TC_PDF
 
             $this->setCustomTextColor($field, $values[$field]);
 
-            $this->customMultiCell([
-                'width' => $column['colWidth'],
-                'height' => $rowHeight,
-                'text' => $this->getCustomValue($field, $values[$field]),
-                'border' => 1,
-                'align' => $isCentered ? 'C' : 'L',
-                'ln' => 0,
-                'maxh' => $rowHeight,
-                'valign' => $isCentered ? 'M' : 'T',
-            ]);
+            $value = $this->getCustomValue($field, $values[$field]);
+
+            if ($field == 'source') {
+
+                $this->SetTextColor(0, 0, 255);
+
+                $this->customCell([
+                    'width' => $column['colWidth'],
+                    'height' => $rowHeight,
+                    'text' => 'Download Link',
+                    'border' => 1,
+                    'align' => 'C',
+                    'link' => $this->baseModel->getStorageFolder() . $value,
+                    'calign' => 'C',
+                ]);
+
+                $this->SetTextColor(0, 0, 0);
+
+            } else {
+                $this->customMultiCell([
+                    'width' => $column['colWidth'],
+                    'height' => $rowHeight,
+                    'text' => $value,
+                    'border' => 1,
+                    'align' => $isCentered ? 'C' : 'L',
+                    'ln' => 0,
+                    'maxh' => $rowHeight,
+                    'valign' => $isCentered ? 'M' : 'T',
+                ]);
+            }
             // restore text color
             $this->SetTextColor(255, 255, 255, 0);
         }
