@@ -251,4 +251,13 @@ class BaseModel extends Model
     ****************************************************************************
     */
 
+    public function getDownloadFolder()
+    {
+        return url('/') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }

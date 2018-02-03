@@ -33,8 +33,7 @@ class TableReportModel extends TC_PDF
     public function createReport($results, $info, $file)
     {
         $this->AddPage($this->orientation);
-file_put_contents('../../outputs/vadzim_results.txt', print_r($results, TRUE));
-file_put_contents('../../outputs/vadzim_info.txt', print_r($info, TRUE));
+
         $pageHeight = $this->getCustomPageHeight();
         $bottomMargin = $this->getCustomPageBottomMargin();
 
@@ -292,7 +291,7 @@ file_put_contents('../../outputs/vadzim_info.txt', print_r($info, TRUE));
                     'text' => 'Download Link',
                     'border' => 1,
                     'align' => 'C',
-                    'link' => $this->baseModel->getStorageFolder() . $value,
+                    'link' => $this->baseModel->getDownloadFolder() . $value,
                     'calign' => 'C',
                 ]);
 
