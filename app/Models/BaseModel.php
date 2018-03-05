@@ -7,7 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class BaseModel extends Model
+abstract class BaseModel extends Model
 {
     protected $database = NULL;
     protected $table = NULL;
@@ -74,7 +74,7 @@ class BaseModel extends Model
 
     protected function applySortAndFilter($query, $data=[])
     {
-        $sort = $filter = [];
+        $sort = $filter = $search = [];
 
         if (isset($data['sort'])) {
             $sort = is_array($data['sort']) ? $data['sort'] :
@@ -92,11 +92,36 @@ class BaseModel extends Model
             }
         });
 
+        if (isset($data['search'])) {
+
+            $search = $data['search'];
+
+            $query->where(function($query) use ($search) {
+                $query = $this->applyCustomSearch($query, $search['info'],
+                        '%' . $search['value'] . '%');
+            });
+        }
+
         foreach ($sort as $filed => $order) {
 
             $sortOrder = $order ? strtolower($order) : env('TABLE_ORDER');
 
             $query->orderBy($filed, $sortOrder);
+        }
+
+        return $query;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    private function applyCustomSearch($query, $search, $value)
+    {
+        foreach ($search as $file => $fields) {
+            foreach ($fields as $field) {
+                $query->orWhere($file . '.' . $field, 'like', $value);
+            }
         }
 
         return $query;
@@ -127,7 +152,7 @@ class BaseModel extends Model
     ****************************************************************************
     */
 
-    private function applyCustomClause($query, $field, $info, $operator)
+    private function applyCustomClause($query, $field, $info, $operator='OR')
     {
         $clause = $operator == 'OR' ? 'orWhere' : 'where';
 

@@ -13,6 +13,9 @@ class GenreModel extends LibraryModel
     protected $fillable = [
         'genre',
     ];
+    protected $searchable = [
+        'genre',
+    ];
 
     /*
     ****************************************************************************

@@ -15,6 +15,10 @@ class AuthorModel extends LibraryModel
         'description',
         'picture',
     ];
+    protected $searchable = [
+        'author',
+        'description',
+    ];
 
     /*
     ****************************************************************************

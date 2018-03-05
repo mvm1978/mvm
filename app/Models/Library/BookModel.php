@@ -29,6 +29,10 @@ class BookModel extends LibraryModel
         'approve_date',
         'remove_date',
     ];
+    protected $searchable = [
+        'title',
+        'description',
+    ];
 
     /*
     ****************************************************************************
@@ -64,6 +68,18 @@ class BookModel extends LibraryModel
     public function getTableData($data)
     {
         $query = $this->getQuery();
+
+        if (isset($data['search'])) {
+            $data['search'] = [
+                'info' => [
+                    'authors' => [
+                        'author'
+                    ],
+                    'books' => $this->getSearchable(),
+                ],
+                'value' => $data['search'],
+            ];
+        }
 
         return $this->paginate($query, $data);
     }

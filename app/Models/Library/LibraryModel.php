@@ -4,10 +4,20 @@ namespace App\Models\Library;
 
 use App\Models\BaseModel;
 
-class LibraryModel extends BaseModel
+abstract class LibraryModel extends BaseModel
 {
     protected $database = 'library';
     protected $primeKey = 'id';
+    protected $searchable = [];
+
+    /*
+    ****************************************************************************
+    */
+
+    protected function getSearchable()
+    {
+        return $this->searchable;
+    }
 
     /*
     ****************************************************************************
