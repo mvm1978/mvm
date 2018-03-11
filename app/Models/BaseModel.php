@@ -285,4 +285,18 @@ abstract class BaseModel extends Model
     ****************************************************************************
     */
 
+    public function getSearchInfo($search)
+    {
+        return [
+            'info' => [
+                $this->table => $this->searchable,
+            ],
+            'value' => $search,
+        ];
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }

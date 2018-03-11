@@ -4,11 +4,8 @@ namespace App\Models\Library\Reports;
 
 use App\Common\TC_PDF;
 
-use App\Models\BaseModel;
-
 class TableReportModel extends TC_PDF
 {
-    private $baseModel;
     private $pictureRatio = 1.4;
     private $chartWidth = 80;
     private $chartHeight = 80;
@@ -22,8 +19,6 @@ class TableReportModel extends TC_PDF
     public function __construct()
     {
         parent::__construct($this->orientation);
-
-        $this->baseModel = new BaseModel();
     }
 
     /*
@@ -244,7 +239,7 @@ class TableReportModel extends TC_PDF
         $height = min($rowHeight - 2, $column['colWidth'] * $this->pictureRatio);
 
         $this->customImage([
-            'file' => $this->baseModel->getStorageFolder() . $values[$field],
+            'file' => $this->getStorageFolder() . $values[$field],
             'x' => $this->getX() + 1,
             'y' => $this->getY() + ceil(($rowHeight - $height) / 2),
             'w' => $column['colWidth'] - 2,
@@ -291,7 +286,7 @@ class TableReportModel extends TC_PDF
                     'text' => 'Download Link',
                     'border' => 1,
                     'align' => 'C',
-                    'link' => $this->baseModel->getDownloadFolder() . $value,
+                    'link' => $this->getDownloadFolder() . $value,
                     'calign' => 'C',
                 ]);
 

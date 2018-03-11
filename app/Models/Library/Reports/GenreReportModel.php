@@ -2,8 +2,6 @@
 
 namespace App\Models\Library\Reports;
 
-use App\Models\BaseModel;
-
 class GenreReportModel extends TableReportModel
 {
     protected $title = 'Genres';
@@ -16,8 +14,6 @@ class GenreReportModel extends TableReportModel
     public function __construct()
     {
         parent::__construct($this->orientation);
-
-        $this->baseModel = new BaseModel();
     }
 
     /*

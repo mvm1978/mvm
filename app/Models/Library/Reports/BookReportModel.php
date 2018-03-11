@@ -2,8 +2,6 @@
 
 namespace App\Models\Library\Reports;
 
-use App\Models\BaseModel;
-
 class BookReportModel extends TableReportModel
 {
     protected $title = 'Books';
@@ -21,9 +19,6 @@ class BookReportModel extends TableReportModel
     public function __construct()
     {
         parent::__construct($this->orientation);
-
-
-        $this->baseModel = new BaseModel();
     }
 
     /*

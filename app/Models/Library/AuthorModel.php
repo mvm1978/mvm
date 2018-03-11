@@ -28,6 +28,10 @@ class AuthorModel extends LibraryModel
     {
         $query = $this->getQuery();
 
+        if (isset($data['search'])) {
+            $data['search'] = $this->getSearchInfo($data['search']);
+        }
+
         return $this->paginate($query, $data);
     }
 
