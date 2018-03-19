@@ -40,6 +40,8 @@ class BookController extends LibraryController
             'Content-Type: application/pdf',
         ];
 
+        $this->model->downloadIncrement($fileName);
+
         return Response::download($file, $fileName, $headers);
     }
 

@@ -308,4 +308,14 @@ class BookModel extends LibraryModel
     ****************************************************************************
     */
 
+    public function downloadIncrement($fileName)
+    {
+        $this->where('source', $fileName)
+            ->increment('downloads');
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }
