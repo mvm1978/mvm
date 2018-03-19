@@ -445,4 +445,23 @@ class TableReportModel extends TC_PDF
     ****************************************************************************
     */
 
+    public function getStorageFolder()
+    {
+        return storage_path() . DIRECTORY_SEPARATOR . 'app' .
+                DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getDownloadFolder()
+    {
+        return url('/') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
 }
