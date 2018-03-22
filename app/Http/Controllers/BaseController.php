@@ -274,7 +274,7 @@ class BaseController extends Controller
         $upload->move(public_path($path), $storageFileName);
 
         copy(public_path() . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . $storageFileName,
-                $this->model->getStorageFolder() . $storageFileName);
+                \App\Models\BaseModel::getStorageFolder() . $storageFileName);
 
         return $storageFileName;
     }

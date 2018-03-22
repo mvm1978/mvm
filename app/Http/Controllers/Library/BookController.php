@@ -34,7 +34,7 @@ class BookController extends LibraryController
             return $this->constructErrorResponse();
         }
 
-        $file = $this->model->getStorageFolder() . $fileName;
+        $file = \App\Models\BaseModel::getStorageFolder() . $fileName;
 
         $headers = [
             'Content-Type: application/pdf',
@@ -136,7 +136,7 @@ class BookController extends LibraryController
 
         $bookTitle = ucwords(str_replace('_', ' ', $title));
         $bookAuthor = ucwords(str_replace('_', ' ', $author));
-        $file = $this->model->getTempFolder() . $bookTitle . '.pdf';
+        $file = \App\Models\BaseModel::getTempFolder() . $bookTitle . '.pdf';
 
         $model->createPDF($bookTitle, $bookAuthor, $file);
 

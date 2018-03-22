@@ -257,7 +257,7 @@ abstract class BaseModel extends Model
     ****************************************************************************
     */
 
-    public function getStorageFolder()
+    public static function getStorageFolder()
     {
         return storage_path() . DIRECTORY_SEPARATOR . 'app' .
                 DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
@@ -267,16 +267,16 @@ abstract class BaseModel extends Model
     ****************************************************************************
     */
 
-    public function getTempFolder()
+    public static function getTempFolder()
     {
-        return $this->getStorageFolder() . 'temp' . DIRECTORY_SEPARATOR;
+        return self::getStorageFolder() . 'temp' . DIRECTORY_SEPARATOR;
     }
 
     /*
     ****************************************************************************
     */
 
-    public function getDownloadFolder()
+    public static function getDownloadFolder()
     {
         return url('/') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
     }

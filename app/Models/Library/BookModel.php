@@ -9,6 +9,8 @@ use App\Models\Library\Reports\BookReportModel;
 
 class BookModel extends LibraryModel
 {
+    const CHART_MAX_SEGMENT = 5;
+
     protected $table = 'books';
 
     protected $fillable = [
@@ -155,76 +157,126 @@ class BookModel extends LibraryModel
     public function getCharts()
     {
         $return = [];
-        $maxSegment = 5;
 
         foreach (['author', 'genre'] as $field) {
 
             $table = $field . 's';
 
-            $return[$table] = [];
-
-            $results = $this->select(
-                        $table . '.' . $field,
-                        DB::raw('COUNT(books.id) AS bookCount')
-                    )
-                    ->join($table, $table . '.id', 'books.' .$field . '_id')
-                    ->groupBy($field)
-                    ->orderBy('bookCount', 'desc')
-                    ->get()
-                    ->toArray();
-
-            $count = 0;
-            $info = [];
-
-            foreach ($results as $result) {
-
-                $index = min($maxSegment, $count++);
-
-                $info['labels'][$index] = $count > $maxSegment + 1 ? 'Other' :
-                        $result[$field];
-
-                $info['data'][$index] = $info['data'][$index] ?? 0;
-
-                $info['data'][$index] = $count > $maxSegment + 1 ?
-                        $info['data'][$index] + $result['bookCount'] :
-                        $result['bookCount'];
-
-                $count = $count++;
+            foreach (['rating', 'downloads'] as $prefix) {
+                $return[$table][$prefix] = $this->getChartTallies($prefix, $field);
             }
-
-            $return[$table] = $info;
         }
 
+        $return['books']['rating'] = $this->getBookChartTalliesByVotes();
+        $return['books']['downloads'] = $this->getBookChartTalliesByDownloads();
+
+        return $return;
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getBookChartTalliesByVotes()
+    {
         $results = $this->select(
                     'title',
                     DB::raw('SUM(upvotes) AS upvotes'),
                     DB::raw('SUM(downvotes) AS downvotes'),
-                    DB::raw('SUM(upvotes - downvotes) AS bookRating')
+                    DB::raw('SUM(upvotes - downvotes) AS booksRating')
                 )
+                ->where('upvotes', '>', '0')
+                ->orWhere('downvotes', '>', '0')
                 ->groupBy('title')
-                ->orderBy('bookRating', 'desc')
+                ->orderBy('booksRating', 'desc')
                 ->orderBy('title', 'asc')
-                ->take($maxSegment)
+                ->take(BookModel::CHART_MAX_SEGMENT)
                 ->get()
                 ->toArray();
 
-        $return += [
-            'books' => [
-                'labels' => array_column($results, 'title'),
-                'data' => [
-                    [
-                        'data' => array_column($results, 'upvotes'),
-                        'label' => 'Upvotes',
-                    ],
-                    [
-                        'data' => array_column($results, 'downvotes'),
-                        'label' => 'Downvotes',
-                    ],
+        return [
+            'labels' => array_column($results, 'title'),
+            'data' => [
+                [
+                    'data' => array_column($results, 'upvotes'),
+                    'label' => 'Upvotes',
                 ],
-            ]
+                [
+                    'data' => array_column($results, 'downvotes'),
+                    'label' => 'Downvotes',
+                ],
+            ],
         ];
+    }
 
-        return $return;
+    /*
+    ****************************************************************************
+    */
+
+    public function getBookChartTalliesByDownloads()
+    {
+        $results = $this->select(
+                    'title',
+                    DB::raw('SUM(downloads) AS tally')
+                )
+                ->where('downloads', '>', '0')
+                ->groupBy('title')
+                ->orderBy('tally', 'desc')
+                ->orderBy('title', 'asc')
+                ->take(BookModel::CHART_MAX_SEGMENT)
+                ->get()
+                ->toArray();
+
+        return [
+            'labels' => array_column($results, 'title'),
+            'data' => [
+                [
+                    'data' => array_column($results, 'tally'),
+                    'label' => 'Downloads',
+                ],
+            ],
+        ];
+    }
+
+    /*
+    ****************************************************************************
+    */
+
+    public function getChartTallies($prefix, $field)
+    {
+        $count = 0;
+        $info = [];
+
+        $table = $field . 's';
+
+        $aggregated = $prefix == 'rating' ? 'COUNT(' . $this->table . '.id)' :
+                'SUM(' . $this->table . '.downloads)';
+
+        $results = $this->select(
+                    $table . '.' . $field,
+                    DB::raw($aggregated . ' AS tally')
+                )
+                ->join($table, $table . '.id', $this->table . '.' . $field . '_id')
+                ->groupBy($table . '.' . $field)
+                ->orderBy('tally', 'desc')
+                ->get()
+                ->toArray();
+
+        foreach ($results as $result) {
+
+            $isOther = $count > BookModel::CHART_MAX_SEGMENT || ! $result['tally'];
+            $index = min(BookModel::CHART_MAX_SEGMENT, $count);
+
+            $info['labels'][$index] = $isOther ? 'Other' : $result[$field];
+            $info['data'][$index] = $info['data'][$index] ?? 0;
+
+            $info['data'][$index] = $isOther ?
+                    $info['data'][$index] + $result['tally'] : $result['tally'];
+
+            $count += $isOther ? 0 : 1;
+        }
+
+        return $info;
     }
 
     /*
@@ -240,7 +292,7 @@ class BookModel extends LibraryModel
             $chartContent = base64_decode($content);
             $fileName = round(microtime(TRUE) * 10000);
 
-            $info['file'] = $this->getTempFolder() . $fileName . '.png';
+            $info['file'] = \App\Models\BaseModel::getTempFolder() . $fileName . '.png';
 
             file_put_contents($info['file'], $chartContent);
         }

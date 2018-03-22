@@ -239,7 +239,7 @@ class TableReportModel extends TC_PDF
         $height = min($rowHeight - 2, $column['colWidth'] * $this->pictureRatio);
 
         $this->customImage([
-            'file' => $this->getStorageFolder() . $values[$field],
+            'file' => \App\Models\BaseModel::getStorageFolder() . $values[$field],
             'x' => $this->getX() + 1,
             'y' => $this->getY() + ceil(($rowHeight - $height) / 2),
             'w' => $column['colWidth'] - 2,
@@ -286,7 +286,7 @@ class TableReportModel extends TC_PDF
                     'text' => 'Download Link',
                     'border' => 1,
                     'align' => 'C',
-                    'link' => $this->getDownloadFolder() . $value,
+                    'link' => \App\Models\BaseModel::getDownloadFolder() . $value,
                     'calign' => 'C',
                 ]);
 
@@ -386,7 +386,7 @@ class TableReportModel extends TC_PDF
             'align' => 'C',
         ]);
 
-        $chartX = 0;
+        $chartX = 5;
         $chartY = $this->getCustomPageTopMargin() + $this->rowHeight;
 
         foreach ($charts as $key => $chart) {
@@ -396,9 +396,22 @@ class TableReportModel extends TC_PDF
             $chartWidth = round($this->chartWidth * $chartWidthFactor);
 
             if ($chartX + $chartWidth > $pageWidth) {
-                $chartX = 0;
+                $chartX = 5;
                 $chartY = $this->getChartY($chartY + $this->rowHeight,
                         $pageHeight, $topMargin);
+            }
+
+            if ($chartY + $this->chartHeight + $this->rowHeight > $pageHeight) {
+
+                $this->AddPage($this->orientation);
+
+                $this->customMultiCell([
+                    'width' => $pageWidth,
+                    'text' => $this->title,
+                    'align' => 'C',
+                ]);
+
+                $chartY = $this->rowHeight + $topMargin;
             }
 
             $this->customMultiCell([
@@ -439,25 +452,6 @@ class TableReportModel extends TC_PDF
         }
 
         return $chartY;
-    }
-
-    /*
-    ****************************************************************************
-    */
-
-    public function getStorageFolder()
-    {
-        return storage_path() . DIRECTORY_SEPARATOR . 'app' .
-                DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR;
-    }
-
-    /*
-    ****************************************************************************
-    */
-
-    public function getDownloadFolder()
-    {
-        return url('/') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
     }
 
     /*

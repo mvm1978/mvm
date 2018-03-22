@@ -32,7 +32,7 @@ class LibraryController extends BaseController
             $payload['charts'] = $model->getChartImages($payload['charts']);
         }
 
-        $file = $this->model->getTempFolder() . $report;
+        $file = \App\Models\BaseModel::getTempFolder() . $report;
 
         $model->createReport($payload, $file);
 
@@ -49,7 +49,7 @@ class LibraryController extends BaseController
             return $this->constructErrorResponse();
         }
 
-        $file = $this->model->getTempFolder() . $fileName;
+        $file = \App\Models\BaseModel::getTempFolder() . $fileName;
 
         $headers = [
             'Content-Type: application/pdf',
